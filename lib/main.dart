@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/loginpage': (context) => LoginPage(title: 'Mugens Motoshop'),
-        '/registerPage': (context) => RegisterPage()
+        '/registerPage': (context) => RegisterPage(),
+        '/dashboard': (context) => Dashboard()
       },
     );
   }
@@ -84,6 +85,9 @@ class LoginPage extends StatelessWidget {
         onPressed: () {
           print("email : " + emailController.text);
           print("password : " + passwordController.text);
+          if (emailController.text == "admin" && passwordController.text == "123") {
+            Navigator.pushReplacementNamed(context, '/dashboard');
+          }
         },
         child: Text("Login",
           textAlign: TextAlign.center,
@@ -348,3 +352,146 @@ class RegisterPage extends StatelessWidget {
     );
   }
 }
+
+
+class Dashboard extends StatefulWidget {
+
+  @override
+  _DashboardState createState() => _DashboardState();
+}
+
+  List texts=["Seat Cover","Springs","Tires","Headlights","Brake Lights","Rims","Seat Cover","Springs","Tires","Headlights","Brake Lights","Rims"];
+  List images = ["https://media.karousell.com/media/photos/products/2018/08/04/motor_seat_cover_1533355066_b3c8c780_progressive.jpg",
+                "https://cf.shopee.ph/file/1caccbfc39799ef5e38ec4214d953580",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh29lrya7KJ-OjWGfKWzKooVbM9UTqlLff5g&usqp=CAU",
+                "https://cf.shopee.ph/file/948b8d1365d5932289900d5037e5465e",
+                "https://cf.shopee.ph/file/a3cc0d447c181f74fdb8ca0ac25400a7",
+                "https://image.made-in-china.com/43f34j00ZNFQpSOlSqkH/Motor-Parts-19-1-4.jpg",
+                "https://media.karousell.com/media/photos/products/2018/08/04/motor_seat_cover_1533355066_b3c8c780_progressive.jpg",
+                "https://cf.shopee.ph/file/1caccbfc39799ef5e38ec4214d953580",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh29lrya7KJ-OjWGfKWzKooVbM9UTqlLff5g&usqp=CAU",
+                "https://cf.shopee.ph/file/948b8d1365d5932289900d5037e5465e",
+                "https://cf.shopee.ph/file/a3cc0d447c181f74fdb8ca0ac25400a7",
+                "https://image.made-in-china.com/43f34j00ZNFQpSOlSqkH/Motor-Parts-19-1-4.jpg",
+                ];
+
+                
+  
+class CustomWidget extends StatelessWidget {
+  CustomWidget(this._index) {
+    debugPrint('initialize: $_index');
+  }
+
+  
+
+
+  final int _index;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        height: 200,
+        color: (_index % 2 != 0) ? Colors.white : Colors.grey,
+        child: Center(child: Text(texts.elementAt(_index), style: TextStyle(fontSize: 40))),
+      ),
+      onTap: (){
+        print(texts.elementAt(_index));
+      },
+    );
+  }
+}
+class _DashboardState extends State<Dashboard> {
+
+  
+  String name;
+
+  _DashboardState() {
+  }
+
+
+
+  @override
+        final List<String> list = List.generate(10, (index) => "Text $index");
+  Widget build(BuildContext context) {
+        return Scaffold(
+          body: SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.only(bottom: 8.0), 
+                  sliver: SliverAppBar(floating: true,
+                    pinned: true,
+                    expandedHeight: 150.0,
+                    flexibleSpace: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          width: 300,
+                          child: FlexibleSpaceBar(
+                                title: Text('Mugen Motoshop Dashboard',style: TextStyle(color: Colors.black),),
+                          )
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: (){
+                            print("test");
+                          },
+                        )
+                      ]
+                    ),
+                  ) ),
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200.0,
+                      mainAxisSpacing: 100.0,
+                      crossAxisSpacing: 20.0,
+                      childAspectRatio: 2.0,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return Column(children: <Widget>[
+                          Flexible(
+                            child: Image.network(images.elementAt(index))
+                          ),
+                          Container(
+                          alignment: Alignment.center,
+                          color: Colors.white,
+                          child: Text(texts.elementAt(index)),
+                        )]);
+                      },
+                      childCount: texts.length,
+                    ),
+                  )
+              ]
+            )
+          ),
+          endDrawer: Drawer(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("test"),
+                SizedBox(height: 20),
+                InkWell(
+                  child:Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: SizedBox(height: 40, child: Text("Add an Item"),),
+                  ),
+                  onTap: (){
+                    print("test");
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.logout),
+                  onPressed: () async {
+                    Navigator.pushReplacementNamed(context, '/loginpage');
+                  },
+                ),
+              ],
+            )
+          ),
+        );
+      }
+    }
+
+    
